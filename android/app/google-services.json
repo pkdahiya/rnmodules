@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "253804555930",
+    "project_id": "rnmodules-3c21a",
+    "storage_bucket": "rnmodules-3c21a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253804555930:android:67ea02028deb9f5d00b923",
+        "android_client_info": {
+          "package_name": "com.rnmodules"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAolR_KrwfZQqD9SjF8Gs4VndS0eilMhjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
