@@ -145,6 +145,14 @@ jobs:
             app/build/outputs/apk/release/app-release.apk
             app/build/outputs/bundle/release/app-release.aab
 
+      - name: Find APK/AAB
+        id: find_artifact
+        run: |
+          APK_PATH=$(find . -path '*/release/*.apk' -print -quit)
+          AAB_PATH=$(find . -path '*/release/*.aab' -print -quit)
+          echo "apk_path=${APK_PATH}" >> $GITHUB_OUTPUT
+          echo "aab_path=${AAB_PATH}" >> $GITHUB_OUTPUT
+
       - name: Setup Firebase CLI
         run: |
           curl -sL https://firebase.tools | bash
@@ -154,6 +162,16 @@ jobs:
     #       echo "firebase_cli_token = '${{ secrets.FIREBASE_TOKEN }}'" > fastlane/Appfile
     #       echo "app_id = '${{ secrets.FIREBASE_APP_ID }}'" >> fastlane/Appfile
     #       echo "groups = '${{ 'testergroup' }}'" >> fastlane/Appfile
+
+      - name: Configure Fastlane
+        env:
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          PLAY_STORE_JSON_KEY: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+        run: |
+          mkdir -p fastlane
+          echo "json_key_file_data = '${PLAY_STORE_JSON_KEY}'" > fastlane/Appfile
+          echo "package_name = 'com.rnmodules'" >> fastlane/Appfile
+          echo "firebase_app_id = '${FIREBASE_APP_ID}'" >> fastlane/Appfile
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -170,8 +188,8 @@ jobs:
           bundle install
           bundle exec fastlane --version
           bundle exec fastlane add_plugin firebase_app_distribution
-          sudo chmod -R a+r /Library/Ruby/Gems/2.6.0/gems/fastlane-plugin-firebase_app_distribution-0.1.4
-          bundle exec fastlane add_plugin firebase_app_distribution
+    #       sudo chmod -R a+r /Library/Ruby/Gems/2.6.0/gems/fastlane-plugin-firebase_app_distribution-0.1.4
+    #       bundle exec fastlane add_plugin firebase_app_distribution
 
         #   sudo gem install fastlane -NV
         #   fastlane add_plugin firebase_app_distribution
@@ -180,8 +198,16 @@ jobs:
 
         #   sudo gem install fastlane -NV 
 
-      - name: Deploy to firebase
+      - name: Run Fastlane
+        env:
+          FIREBASE_CLI_TOKEN: ${{ secrets.FIREBASE_CLI_TOKEN }}
+          BUILD_ARTIFACT: ${{ steps.find_artifact.outputs.apk_path || steps.find_artifact.outputs.aab_path }}
         run: |
-          cd android
-          bundle exec fastlane distribute_to_firebase
+          cd android && bundle exec fastlane distribute_to_firebase
+
+    #   - name: Deploy to firebase
+    #     run: |
+    #       cd android
+    #       bundle exec fastlane distribute_to_firebase
+    # cd android && bundle exec fastlane distribute_to_firebase
 
