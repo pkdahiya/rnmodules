@@ -161,21 +161,22 @@ jobs:
 
       - name: Install Fastlane
         run: |
-          sudo gem install fastlane -NV
-          fastlane add_plugin firebase_app_distribution
+          cd android
+          bundle install
+          bundle exec fastlane --version
+          bundle exec fastlane add_plugin firebase_app_distribution
           sudo chmod -R a+r /Library/Ruby/Gems/2.6.0/gems/fastlane-plugin-firebase_app_distribution-0.1.4
-          fastlane add_plugin firebase_app_distribution
-        #   bundle install
-        #   bundle exec fastlane --version
-        #   bundle exec fastlane add_plugin firebase_app_distribution
+          bundle exec fastlane add_plugin firebase_app_distribution
+
+        #   sudo gem install fastlane -NV
+        #   fastlane add_plugin firebase_app_distribution
         #   sudo chmod -R a+r /Library/Ruby/Gems/2.6.0/gems/fastlane-plugin-firebase_app_distribution-0.1.4
-        #   bundle exec fastlane add_plugin firebase_app_distribution
+        #   fastlane add_plugin firebase_app_distribution
 
         #   sudo gem install fastlane -NV 
 
       - name: Deploy to firebase
         run: |
           cd android
-          fastlane distribute_to_firebase
-        #   bundle exec fastlane distribute_to_firebase
+          bundle exec fastlane distribute_to_firebase
 
