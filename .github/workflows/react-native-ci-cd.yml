@@ -149,11 +149,11 @@ jobs:
         run: |
           curl -sL https://firebase.tools | bash
 
-      - name: Configure Fastlane Firebase
-        run: |
-          echo "firebase_cli_token = '${{ secrets.FIREBASE_TOKEN }}'" > fastlane/Appfile
-          echo "app_id = '${{ secrets.FIREBASE_APP_ID }}'" >> fastlane/Appfile
-          echo "groups = '${{ 'testers' }}'" >> fastlane/Appfile
+    #   - name: Configure Fastlane Firebase
+    #     run: |
+    #       echo "firebase_cli_token = '${{ secrets.FIREBASE_TOKEN }}'" > fastlane/Appfile
+    #       echo "app_id = '${{ secrets.FIREBASE_APP_ID }}'" >> fastlane/Appfile
+    #       echo "groups = '${{ 'testergroup' }}'" >> fastlane/Appfile
 
             
       - name: Install Node.js dependencies
@@ -164,6 +164,10 @@ jobs:
           cd android
           bundle install
           bundle exec fastlane --version
+        #   bundle exec fastlane add_plugin firebase_app_distribution
+        #   sudo chmod -R a+r /Library/Ruby/Gems/2.6.0/gems/fastlane-plugin-firebase_app_distribution-0.1.4
+        #   bundle exec fastlane add_plugin firebase_app_distribution
+
         #   sudo gem install fastlane -NV 
 
       - name: Deploy to firebase
