@@ -66,16 +66,21 @@ default_platform(:android)
 platform :android do
   desc "Deploy to Firebase App Distribution"
   lane :distribute_to_firebase do
-    gradle(
-    task: 'assemble',
-    build_type: 'Release'
-  )
+    # Verify build file exists
+    # apk_path = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] || "app/build/outputs/apk/release/app-release.apk"
+    # raise "No APK found at #{apk_path}" unless File.exist?(apk_path)
 
-  firebase_app_distribution(
-    app: ENV["FIREBASE_APP_ID"],
-    groups: "testergroup",
-  )
+    # Upload to Firebase
+    firebase_app_distribution(
+      app: ENV["FIREBASE_APP_ID"],
+      firebase_cli_token: ENV["FIREBASE_CLI_TOKEN"],
+      apk_path: "../#{ENV['BUILD_ARTIFACT']}",
+      groups: "testers",
+      release_notes: "release_notes_from_git_commits",
+    )
   end
+end
+ 
   # lane :distribute_to_firebase do
     
   #   firebase_app_distribution(
@@ -86,4 +91,3 @@ platform :android do
   #     release_notes: "Automated build from GitHub Actions"
   #   )
   # end
-end
